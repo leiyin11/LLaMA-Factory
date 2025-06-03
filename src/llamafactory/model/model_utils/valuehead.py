@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Optional
 
 import torch
 from transformers.utils import cached_file
@@ -30,11 +30,14 @@ if TYPE_CHECKING:
 logger = get_logger(__name__)
 
 
-def load_valuehead_params(path_or_repo_id: str, model_args: "ModelArguments") -> Dict[str, torch.Tensor]:
+def load_valuehead_params(
+    path_or_repo_id: str, model_args: "ModelArguments"
+) -> Optional[Dict[str, torch.Tensor]]:
     r"""
     Loads value head parameters from Hugging Face Hub or local disk.
 
-    Returns: dict with keys `v_head.summary.weight` and `v_head.summary.bias`.
+    Returns a dictionary with keys `v_head.summary.weight` and
+    `v_head.summary.bias`, or ``None`` if no value head weights are found.
     """
     kwargs = {"path_or_repo_id": path_or_repo_id, "cache_dir": model_args.cache_dir, "token": model_args.hf_hub_token}
     err_text = ""
